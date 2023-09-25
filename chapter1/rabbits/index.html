@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scroll</title>
+    <style>
+      body {
+        background: wheat;
+        margin: 0;
+        padding: 0;
+      }
+      #btn-find {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        border: 0;
+        background: palevioletred;
+        padding: 3rem;
+        font-size: 2rem;
+        color: white;
+        border-radius: 0 0 2rem 2rem;
+        cursor: pointer;
+      }
+      .figure-box {
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .figure-box figure {
+        display: block;
+        width: 250px;
+        height: 250px;
+        background: url('./img/carrot.png') no-repeat center;
+      }
+      .figure-box figure#rabbit {
+        background-image: url('./img/rabbit.png');
+      }
+    </style>
+  </head>
+  <body>
+    <button id="btn-find">🐰find rabbit🐰</button>
+    <div class="figure-box">
+      <figure></figure>
+      <figure></figure>
+      <figure></figure>
+      <figure></figure>
+      <figure></figure>
+      <figure></figure>
+      <figure></figure>
+      <figure></figure>
+      <figure id="rabbit"></figure>
+      <figure></figure>
+      <figure></figure>
+      <figure></figure>
+      <figure></figure>
+      <figure></figure>
+    </div>
+    <script>
+      const rabbit = document.querySelector('#rabbit');
+      const btnFind = document.querySelector('#btn-find');
+      btnFind.addEventListener('click', () => {
+        rabbit.scrollIntoView({
+          block: 'center',
+          behavior: 'smooth',
+        });
+      });
+    </script>
+  </body>
+</html>
