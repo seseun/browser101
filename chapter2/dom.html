@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <section>
+      <h1>Hi, sese!</h1>
+      <h3>let's go!</h3>
+    </section>
+    <script>
+      const section = document.querySelector('section'); // 가장 첫 번재 요소를 가져온다.
+      const h2 = document.createElement('h2');
+      const h3 = document.querySelector('h3');
+      h2.setAttribute('class', 'title');
+      h2.textContent = 'this is title.'; // 'innerText' 는 layout을 발생시키고, 'textContent'는 그렇지 않은걸로 알고 있어요.
+      // section.appendChild(h2); // 부모 안에서 가장 마지막에 추가됨
+      section.insertBefore(h2, h3); // 부모.insertBefore(추가할넘, insertBefore할 타겟)
+      section.removeChild(h2);
+    </script>
+  </body>
+</html>
