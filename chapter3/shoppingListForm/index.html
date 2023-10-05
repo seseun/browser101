@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping List</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>Shopping List</header>
+      <main>
+        <p id="no-data">제품이 없습니다.</p>
+        <ul id="list-items" style="display: none"></ul>
+      </main>
+      <footer>
+        <form>
+          <input type="text" placeholder="제품명을 입력해주세요." id="input-name" />
+          <button type="submit" id="btn-add"><span>추가하기</span><span class="material-icons">add_circle_outline</span></button>
+        </form>
+      </footer>
+    </div>
+  </body>
+</html>
