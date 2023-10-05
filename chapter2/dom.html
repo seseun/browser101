@@ -15,7 +15,10 @@
       const h2 = document.createElement('h2');
       const h3 = document.querySelector('h3');
       h2.setAttribute('class', 'title');
-      h2.textContent = 'this is title.'; // 'innerText' 는 layout을 발생시키고, 'textContent'는 그렇지 않은걸로 알고 있어요.
+      h2.textContent = 'this is title.';
+      // 'innerText' 는 layout을 발생시키고, 'textContent'는 그렇지 않은걸로 알고 있어요.
+      // innerText는 IE 8 버전 이하를 지원하기 위해서 IE에 특화되어 개발된 API로 되도록 사용하지 않는것이 좋아요.
+
       // section.appendChild(h2); // 부모 안에서 가장 마지막에 추가됨
       section.insertBefore(h2, h3); // 부모.insertBefore(추가할넘, insertBefore할 타겟)
       section.removeChild(h2);
