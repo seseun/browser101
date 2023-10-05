@@ -48,7 +48,7 @@ function removeItem(e) {
 }
 
 window.addEventListener('load', () => {
-  input.addEventListener('keypress', function (e) {
+  input.addEventListener('keyup', function (e) {
     if (e.key === 'Enter') {
       // || e.keyCode === 13
       e.preventDefault();

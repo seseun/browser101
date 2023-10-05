@@ -52,7 +52,10 @@ list.addEventListener('click', (e) => {
 });
 
 window.addEventListener('load', () => {
-  input.addEventListener('keypress', function (e) {
+  input.addEventListener('keydown', function (e) {
+    if (e.isComposing) {
+      return;
+    }
     if (e.key === 'Enter') {
       // || e.keyCode === 13
       e.preventDefault();
