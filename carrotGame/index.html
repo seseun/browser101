@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carrot game</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="game-container">
+      <button id="btn-play"><span>Start!</span><span class="material-icons">play_arrow</span></button>
+      <div id="count-time">00 : 00</div>
+      <div id="count-carrot">0</div>
+      <div id="game-zone"></div>
+      <div id="toast-replay">
+        <button id="btn-replay"><span class="material-icons">replay</span></button>
+        <span class="text">Replay?</span>
+      </div>
+    </div>
+    <audio src="./sound/bg.mp3" id="audio-bg" loop></audio>
+    <audio src="./sound/alert.wav" id="audio-alert"></audio>
+    <audio src="./sound/carrot_pull.mp3" id="audio-carrot"></audio>
+    <audio src="./sound/bug_pull.mp3" id="audio-bug"></audio>
+    <audio src="./sound/game_win.mp3" id="audio-win"></audio>
+    <script src="./script.js"></script>
+  </body>
+</html>

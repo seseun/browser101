@@ -1,0 +1,122 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: #222;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+button {
+  cursor: pointer;
+}
+#game-container {
+  width: 1200px;
+  height: 680px;
+  background: url('./img/background.png') no-repeat center / 100% 100%;
+  position: relative;
+  > * {
+    border-radius: 10px;
+    border: 3px solid #000;
+    position: absolute;
+  }
+}
+#btn-play {
+  width: 200px;
+  height: 100px;
+  background-color: #ff8f8f;
+  top: 2rem;
+  left: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  span {
+    font-size: 32px;
+    &.material-icons {
+      font-size: 48px;
+    }
+  }
+}
+#count-time {
+  width: 200px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  font-weight: 700;
+  background-color: #fff;
+  top: 2rem;
+  left: calc(50% - 100px);
+}
+#count-carrot {
+  width: 180px;
+  padding-left: 100px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 900;
+  background: #fff url('./img/carrot.png') no-repeat 2rem center;
+  color: #f38623;
+  top: 100px;
+  left: calc(50% - 90px);
+}
+#game-zone {
+  width: 100%;
+  height: 45%;
+  bottom: 0;
+  left: 0;
+  border-radius: 0;
+  border: 0;
+}
+.carrot,
+.bug {
+  position: absolute;
+  cursor: pointer;
+}
+.carrot {
+  width: 80px;
+  height: 80px;
+  background: url('./img/carrot.png') no-repeat center;
+}
+.bug {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: url('./img/bug.png') no-repeat center;
+}
+
+#toast-replay {
+  border: 0;
+  width: 500px;
+  padding: 2rem 0;
+  bottom: 1rem;
+  left: calc(50% - 250px);
+  background: rgba(0, 0, 0, 0.75);
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  #btn-replay {
+    background: #fff;
+    border-radius: 10px;
+    border: 3px solid #222;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 0.5rem;
+    span {
+      font-size: 48px;
+      color: #222;
+    }
+  }
+  span {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+  }
+}
