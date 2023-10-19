@@ -6,18 +6,18 @@
     <title>Carrot game</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="./style.css" />
-    <script src="./script.js" defer></script>
+    <script type="module" src="./src/main.js" defer></script>
   </head>
   <body>
     <div id="game-container">
       <button id="btn-play"><span>Start!</span><span class="material-icons">play_arrow</span></button>
       <div id="timer">00 : 00</div>
       <div id="score">0</div>
-      <div id="game-zone"></div>
-      <div id="toast-replay">
+      <div id="field"></div>
+      <section id="toast">
         <button id="btn-replay"><span class="material-icons">replay</span></button>
         <span class="text">Replay?</span>
-      </div>
+      </section>
     </div>
   </body>
 </html>
