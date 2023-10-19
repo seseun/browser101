@@ -1,41 +1,96 @@
 const btnPlay = document.querySelector('#btn-play');
 const btnReplay = document.querySelector('#btn-replay');
-const timeCounter = document.querySelector('#count-time');
-const carrotCounter = document.querySelector('#count-carrot');
+const timer = document.querySelector('#timer');
+const score = document.querySelector('#score');
 const gameZone = document.querySelector('#game-zone');
 const toastReplay = document.querySelector('#toast-replay');
 const toastReplayText = document.querySelector('#toast-replay .text');
-const audioBg = document.querySelector('#audio-bg');
-const audioAlert = document.querySelector('#audio-alert');
-const audioCarrot = document.querySelector('#audio-carrot');
-const audioBug = document.querySelector('#audio-bug');
-const audioWin = document.querySelector('#audio-win');
 
-// 게임세팅
-function startGame(carrot, bug) {
-  if (btnPlay.classList.contains('stop')) {
-    stopGame();
+const audioBg = new Audio('./sound/bg.mp3');
+const audioAlert = new Audio('./sound/alert.wav');
+const audioCarrot = new Audio('./sound/carrot_pull.mp3');
+const audioBug = new Audio('./sound/bug_pull.mp3');
+const audioWin = new Audio('./sound/game_win.mp3');
+
+const TIMER_SECOND = 10;
+const COUNT_CARROT = 10;
+const COUNT_BUG = 7;
+const SIZE_CARROT = 80;
+const SIZE_BUG = 50;
+
+window.addEventListener('load', () => {
+  btnPlay.addEventListener('click', () => startGame());
+  btnReplay.addEventListener('click', () => startGame());
+});
+
+function startGame() {
+  const isStarted = btnPlay.classList.contains('stop') ? true : false;
+  if (isStarted) {
+    endGame('stop');
     return;
   }
-  audioBg.play();
-  addGameZoneHtml(carrot, bug);
-  startTimer(10);
-  btnPlay.style.display = 'flex';
-  btnPlay.classList.add('stop');
-  btnPlay.innerHTML = `<span>Stop!</span><span class="material-icons">stop</span>`;
-  toastReplay.style.display = 'none';
-  gameZone.style.pointerEvents = 'inherit';
-
+  initGame();
+}
+function initGame() {
+  handleInterface('play');
+  addGameZoneHtml();
   playGame();
 }
-function stopGame() {
-  btnPlay.innerHTML = `<span>Start!</span><span class="material-icons">play_arrow</span>`;
-  audioAlert.play();
-  endGame('Replay?');
+
+function endGame(type) {
+  let text;
+  switch (type) {
+    case 'stop':
+      playSound(audioAlert);
+      text = 'Replay?';
+      break;
+    case 'lose':
+      playSound(audioAlert);
+      text = 'You Lose💩';
+      break;
+    case 'win':
+      playSound(audioWin);
+      text = 'You Win👏';
+      break;
+    default:
+      break;
+  }
+  toastReplayText.textContent = text;
+  handleInterface('stop');
 }
 
-function addGameZoneHtml(carrotCount, bugCount) {
+function handleInterface(state) {
+  switch (state) {
+    case 'play':
+      btnPlay.style.visibility = 'visible';
+      btnPlay.classList.add('stop');
+      btnPlay.innerHTML = `<span>Stop!</span><span class="material-icons">stop</span>`;
+      toastReplay.style.visibility = 'hidden';
+      gameZone.style.pointerEvents = 'inherit';
+      timer.style.visibility = 'visible';
+      score.style.visibility = 'visible';
+      playSound(audioBg);
+      startTimer(TIMER_SECOND);
+      break;
+    case 'stop':
+      btnPlay.style.visibility = 'hidden';
+      btnPlay.classList.remove('stop');
+      btnPlay.innerHTML = `<span>Start!</span><span class="material-icons">play_arrow</span>`;
+      toastReplay.style.visibility = 'visible';
+      gameZone.style.pointerEvents = 'none';
+      timer.style.visibility = 'hidden';
+      score.style.visibility = 'hidden';
+      stopSound(audioBg);
+      stopTimer();
+      break;
+    default:
+      break;
+  }
+}
+function addGameZoneHtml() {
   let zoneHtml = '';
+  const gameZoneWidth = gameZone.getBoundingClientRect().width;
+  const gameZoneHeight = gameZone.getBoundingClientRect().height;
 
   function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
@@ -43,71 +98,59 @@ function addGameZoneHtml(carrotCount, bugCount) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  const gameZoneWidth = gameZone.getBoundingClientRect().width;
-  const gameZoneHeight = gameZone.getBoundingClientRect().height;
-
-  for (let i = 0; i < carrotCount; i++) {
-    const carrotX = getRandomIntInclusive(0, gameZoneWidth - 80);
-    const carrotY = getRandomIntInclusive(0, gameZoneHeight - 80);
-    zoneHtml =
-      zoneHtml +
-      `<div class="carrot" 
-        style="left: ${carrotX}px; top: ${carrotY}px;"
-      ></div>`;
+  function iterateItems(type, count, size) {
+    for (let i = 0; i < count; i++) {
+      const x = getRandomIntInclusive(0, gameZoneWidth - size);
+      const y = getRandomIntInclusive(0, gameZoneHeight - size);
+      zoneHtml =
+        zoneHtml +
+        `<div class="${type}" 
+          style="left: ${x}px; top: ${y}px;"
+        ></div>`;
+    }
   }
 
-  for (let i = 0; i < bugCount; i++) {
-    const bugX = getRandomIntInclusive(0, gameZoneWidth - 50);
-    const bugY = getRandomIntInclusive(0, gameZoneHeight - 50);
-    zoneHtml =
-      zoneHtml +
-      `<div class="bug" 
-        style="left: ${bugX}px; top: ${bugY}px;"
-      ></div>`;
-  }
+  iterateItems('carrot', COUNT_CARROT, SIZE_CARROT);
+  iterateItems('bug', COUNT_BUG, SIZE_BUG);
   gameZone.innerHTML = zoneHtml;
 }
-
-// 게임진행
 function playGame() {
   let carrots = document.querySelectorAll('.carrot');
   const bugs = document.querySelectorAll('.bug');
-  carrotCounter.textContent = carrots.length;
+  score.textContent = carrots.length;
   carrots.forEach((el) => {
     el.addEventListener('click', () => {
       el.remove();
-      audioCarrot.pause();
-      audioCarrot.currentTime = 0;
-      audioCarrot.play();
+      stopSound(audioCarrot);
+      playSound(audioCarrot);
       carrots = document.querySelectorAll('.carrot');
-      carrotCounter.textContent = carrots.length;
+      score.textContent = carrots.length;
       if (carrots.length === 0) {
-        endWin();
+        endGame('win');
       }
     });
   });
   bugs.forEach((el) => {
     el.addEventListener('click', () => {
-      audioBug.play();
-      endLose();
+      playSound(audioBug);
+      endGame('lose');
     });
   });
 }
 
-// 타이머
+// timer
 let timerinterval = {
   isPause: false,
   id: null,
 };
 function startTimer(time) {
   timerinterval.isPause = false;
-  timerCallback(time);
+  updateTimerText(time);
   timerinterval.id = setInterval(() => {
-    --time;
-    timerCallback(time);
+    updateTimerText(--time);
     if (time <= 0) {
       stopTimer();
-      endLose();
+      endGame('lose');
       return;
     }
   }, 1000);
@@ -116,37 +159,21 @@ function stopTimer() {
   clearInterval(timerinterval.id);
   timerinterval.isPause = true;
 }
-function timerCallback(time) {
+function updateTimerText(time) {
   if (!timerinterval.isPause) {
     let minute = parseInt(time / 60, 10);
     let second = parseInt(time % 60, 10);
     let minuteText = minute < 10 ? `0${minute}` : minute;
     let secondText = second < 10 ? `0${second}` : second;
-    timeCounter.textContent = `${minuteText} : ${secondText}`;
+    timer.textContent = `${minuteText} : ${secondText}`;
   }
 }
 
-// 게임끝내기
-function endGame(text) {
-  btnPlay.style.display = 'none';
-  btnPlay.classList.remove('stop');
-  toastReplay.style.display = 'flex';
-  toastReplayText.textContent = text;
-  gameZone.style.pointerEvents = 'none';
-  audioBg.pause();
-  audioBg.currentTime = 0;
-  stopTimer();
+// sound
+function playSound(audio) {
+  audio.play();
 }
-function endLose() {
-  audioAlert.play();
-  endGame('You Lose💩');
+function stopSound(audio) {
+  audio.pause();
+  audio.currentTime = 0;
 }
-function endWin() {
-  audioWin.play();
-  endGame('You Win👏');
-}
-
-window.addEventListener('load', () => {
-  btnPlay.addEventListener('click', () => startGame(10, 7));
-  btnReplay.addEventListener('click', () => startGame(10, 7));
-});

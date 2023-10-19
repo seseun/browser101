@@ -14,6 +14,10 @@ body {
 
 button {
   cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+button:hover {
+  transform: scale(1.1);
 }
 
 #game-container {
@@ -46,7 +50,7 @@ button {
   font-size: 48px;
 }
 
-#count-time {
+#timer {
   width: 200px;
   height: 60px;
   display: flex;
@@ -57,9 +61,10 @@ button {
   background-color: #fff;
   top: 2rem;
   left: calc(50% - 100px);
+  visibility: hidden;
 }
 
-#count-carrot {
+#score {
   width: 180px;
   padding-left: 100px;
   height: 100px;
@@ -71,6 +76,7 @@ button {
   color: #f38623;
   top: 100px;
   left: calc(50% - 90px);
+  visibility: hidden;
 }
 
 #game-zone {
@@ -86,6 +92,11 @@ button {
 .bug {
   position: absolute;
   cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+.carrot:hover,
+.bug:hover {
+  transform: scale(1.1);
 }
 
 .carrot {
@@ -104,14 +115,15 @@ button {
 #toast-replay {
   border: 0;
   width: 500px;
-  padding: 2rem 0;
-  bottom: 1rem;
+  height: 200px;
+  top: calc(50% - 100px);
   left: calc(50% - 250px);
   background: rgba(0, 0, 0, 0.75);
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  visibility: hidden;
 }
 #toast-replay #btn-replay {
   background: #fff;
