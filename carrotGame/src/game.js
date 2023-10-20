@@ -2,9 +2,26 @@
 
 import Field from './field.js';
 import Toast from './toast.js';
-import * as Sound from './sound.js'; // 'bg', 'alert', 'carrot', 'bug', 'win'
+import * as Sound from './sound.js';
 
-export default class Game {
+export default class GameBuilder {
+  withDuration(duration) {
+    this.gameDuration = duration;
+    return this;
+  }
+  withCarrotInfo(obj) {
+    this.carrotInfo = obj;
+    return this;
+  }
+  withBugInfo(obj) {
+    this.bugInfo = obj;
+    return this;
+  }
+  build() {
+    return new Game(this.gameDuration, this.carrotInfo, this.bugInfo);
+  }
+}
+class Game {
   constructor(duration, carrot, bug) {
     this.DURATION = duration;
     this.CARROT = carrot;
@@ -28,7 +45,7 @@ export default class Game {
   startGame() {
     const isStarted = this.btnPlay.classList.contains('stop') ? true : false;
     if (isStarted) {
-      this.finishGame('stop');
+      this.finishGame(FinishType.stop);
       return;
     }
     this.initGame();
@@ -41,16 +58,16 @@ export default class Game {
   finishGame(type) {
     let text;
     switch (type) {
-      case 'stop':
-        Sound.play('alert');
+      case FinishType.stop:
+        Sound.play(Sound.SoundType.alert);
         text = 'Replay?';
         break;
-      case 'lose':
-        Sound.play('alert');
+      case FinishType.lose:
+        Sound.play(Sound.SoundType.alert);
         text = 'You Lose💩';
         break;
-      case 'win':
-        Sound.play('win');
+      case FinishType.win:
+        Sound.play(Sound.SoundType.win);
         text = 'You Win👏';
         break;
       default:
@@ -69,7 +86,7 @@ export default class Game {
         this.gameField.play();
         this.timer.style.visibility = 'visible';
         this.score.style.visibility = 'visible';
-        Sound.play('bg');
+        Sound.play(Sound.SoundType.bg);
         this.startTimer(this.DURATION);
         break;
       case 'stop':
@@ -79,7 +96,7 @@ export default class Game {
         this.gameField.stop();
         this.timer.style.visibility = 'hidden';
         this.score.style.visibility = 'hidden';
-        Sound.stop('bg');
+        Sound.stop(Sound.SoundType.bg);
         this.stopTimer();
         break;
       default:
@@ -93,19 +110,19 @@ export default class Game {
     carrots.forEach((el) => {
       el.addEventListener('click', () => {
         el.remove();
-        Sound.stop('carrot');
-        Sound.play('carrot');
+        Sound.stop(Sound.SoundType.carrot);
+        Sound.play(Sound.SoundType.carrot);
         carrots = document.querySelectorAll('.carrot');
         this.score.textContent = carrots.length;
         if (carrots.length === 0) {
-          this.finishGame('win');
+          this.finishGame(FinishType.win);
         }
       });
     });
     bugs.forEach((el) => {
       el.addEventListener('click', () => {
-        Sound.play('bug');
-        this.finishGame('lose');
+        Sound.play(Sound.SoundType.bug);
+        this.finishGame(FinishType.lose);
       });
     });
   }
@@ -117,7 +134,7 @@ export default class Game {
       this.updateTimerText(--time);
       if (time <= 0) {
         this.stopTimer();
-        this.finishGame('lose');
+        this.finishGame(FinishType.lose);
         return;
       }
     }, 1000);
@@ -136,3 +153,9 @@ export default class Game {
     }
   }
 }
+
+const FinishType = Object.freeze({
+  stop: 'stop',
+  lose: 'lose',
+  win: 'win',
+});
